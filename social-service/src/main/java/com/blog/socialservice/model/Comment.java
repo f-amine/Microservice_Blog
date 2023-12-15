@@ -1,7 +1,7 @@
 package com.blog.socialservice.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,10 +20,10 @@ public class Comment {
     private Long id ;
     private Long user_id;
     private String comment_text;
-    private Long blog_id;
+    private Long blogId;
 
-    @OneToMany(mappedBy = "comment")
-    @JsonIgnore
-    private List<Like> likes;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "comment")
+    @JsonManagedReference
+    private List<Likes> likes;
 
 }

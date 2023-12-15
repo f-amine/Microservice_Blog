@@ -19,4 +19,5 @@ public class Upvote {
     private Long id ;
     private Long user_id;
     private Long blog_id;
+
 }
