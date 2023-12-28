@@ -3,6 +3,7 @@ package com.blog.blogservice.controller;
 import com.blog.blogservice.model.Blog;
 import com.blog.blogservice.response.FullBlogResponse;
 import com.blog.blogservice.service.BlogService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -43,5 +44,16 @@ public class BlogController {
     @GetMapping("/with-comments/{blog-id}")
     public ResponseEntity<FullBlogResponse> findAll(@PathVariable("blog-id") Long blogId) {
         return ResponseEntity.ok(blogService.findAllWithComments(blogId));
+    }
+
+    @Transactional
+    @GetMapping("/by-user/{author}")
+    public ResponseEntity<List<FullBlogResponse>> findAllBlogsByUser(@PathVariable("author") Long author) {
+        return ResponseEntity.ok(blogService.findAllBlogsByUser(author));
+    }
+
+    @GetMapping("/top5")
+    public ResponseEntity<List<FullBlogResponse>> findTop5ByOrderByPublicationDateDesc() {
+        return ResponseEntity.ok(blogService.findLatestBlogs());
     }
 }

@@ -28,7 +28,7 @@ public class CityService {
         return cityRepository.findById(aLong);
     }
 
-    public void delete(City entity) {
-        cityRepository.delete(entity);
+    public void delete(Long id) {
+        cityRepository.deleteById(id);
     }
 }

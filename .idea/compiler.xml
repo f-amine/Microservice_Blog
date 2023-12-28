@@ -9,18 +9,24 @@
         <outputRelativeToContentRoot value="true" />
         <module name="social-service" />
         <module name="config-server" />
+        <module name="auth-service" />
         <module name="blog-service" />
         <module name="gateway" />
         <module name="discovery" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="security" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-service" options="-parameters" />
       <module name="blog-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="security" options="-parameters" />
       <module name="social-service" options="-parameters" />
     </option>
   </component>

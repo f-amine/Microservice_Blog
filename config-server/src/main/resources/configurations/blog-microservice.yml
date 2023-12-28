@@ -24,6 +24,10 @@ spring:
 application:
   config:
     social-url: http://localhost:8222/api
+    auth-url: http://localhost:8222/api
+  security:
+    jwt:
+      secretKey: P4inmZExW3eMSf+dbS0VaDRaRK/Iu7ZTWiCCOyNwnbQGhB4JS5oPdxELOns7YeU
 management:
   tracing:
     sampling:

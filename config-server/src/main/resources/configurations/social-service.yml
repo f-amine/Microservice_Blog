@@ -24,6 +24,9 @@ spring:
 application:
   config:
     blog-url: http://localhost:8222/api/blogs
+  security:
+    jwt:
+      secretKey: P4inmZExW3eMSf+dbS0VaDRaRK/Iu7ZTWiCCOyNwnbQGhB4JS5oPdxELOns7YeU
 
 management:
   tracing:

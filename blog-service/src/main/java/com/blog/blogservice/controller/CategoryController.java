@@ -28,8 +28,8 @@ public class CategoryController {
         return categoryService.findById(id);
     }
 
-    @DeleteMapping
-    public void delete(Category entity) {
-        categoryService.delete(entity);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id);
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,4 +51,37 @@ public class BlogService {
                 .city(blog.getCity())
                 .build();
     }
+
+    public List<FullBlogResponse> findAllBlogsByUser(Long author) {
+        List<Blog> blogs = blogRepository.findAllByAuthor(author);
+        return getFullBlogResponses(blogs);
+    }
+
+
+        public List<FullBlogResponse> findLatestBlogs() {
+            List<Blog> blogs = blogRepository.findTop5ByOrderByPublicationDateDesc();
+            return getFullBlogResponses(blogs);
+        }
+
+    private List<FullBlogResponse> getFullBlogResponses(List<Blog> blogs) {
+        List<FullBlogResponse> fullBlogResponses = new ArrayList<>();
+
+        for (Blog blog : blogs) {
+            var comments = socialClient.findAllCommentsByBlog(blog.getId());
+            FullBlogResponse fullBlogResponse = FullBlogResponse.builder()
+                    .title(blog.getTitle())
+                    .author(blog.getAuthor())
+                    .content(blog.getContent())
+                    .category(blog.getCategory())
+                    .commentList(comments)
+                    .publicationDate(blog.getPublicationDate())
+                    .author(blog.getAuthor())
+                    .city(blog.getCity())
+                    .build();
+            fullBlogResponses.add(fullBlogResponse);
+        }
+
+        return fullBlogResponses;
+    }
 }
+

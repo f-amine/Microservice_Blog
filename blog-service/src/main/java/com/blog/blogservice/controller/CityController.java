@@ -30,8 +30,8 @@ public class CityController {
         return cityService.findById(id);
     }
 
-    @DeleteMapping
-    public void delete(City entity) {
-        cityService.delete(entity);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        cityService.delete(id);
     }
 }
