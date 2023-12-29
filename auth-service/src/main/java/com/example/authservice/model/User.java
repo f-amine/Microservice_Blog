@@ -26,6 +26,8 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    private String profilPic;
+    private String privateProfilPicId;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "user")
@@ -65,4 +67,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

@@ -34,4 +34,9 @@ public class LikeController {
     public void delete(@RequestBody Likes entity) {
         likeService.delete(entity);
     }
+
+    @PostMapping(path = "/toggle/{userId}/{commentId}")
+    public void toggleLike(@PathVariable Long userId, @PathVariable Long commentId) {
+        likeService.toggleLike(userId, commentId);
+    }
 }

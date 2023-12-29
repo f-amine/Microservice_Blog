@@ -8,6 +8,7 @@ import com.blog.blogservice.response.FullBlogResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class BlogService {
 
 
         return FullBlogResponse.builder()
+                .id(blog.getId())
                 .title(blog.getTitle())
                 .author(blog.getAuthor())
                 .content(blog.getContent())
@@ -58,7 +60,8 @@ public class BlogService {
     }
 
 
-        public List<FullBlogResponse> findLatestBlogs() {
+    @Transactional
+    public List<FullBlogResponse> findLatestBlogs() {
             List<Blog> blogs = blogRepository.findTop5ByOrderByPublicationDateDesc();
             return getFullBlogResponses(blogs);
         }
@@ -69,6 +72,7 @@ public class BlogService {
         for (Blog blog : blogs) {
             var comments = socialClient.findAllCommentsByBlog(blog.getId());
             FullBlogResponse fullBlogResponse = FullBlogResponse.builder()
+                    .id(blog.getId())
                     .title(blog.getTitle())
                     .author(blog.getAuthor())
                     .content(blog.getContent())

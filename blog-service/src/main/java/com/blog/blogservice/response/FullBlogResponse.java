@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class FullBlogResponse {
+    private Long id;
     private String title;
     private String content;
     private LocalDateTime publicationDate;

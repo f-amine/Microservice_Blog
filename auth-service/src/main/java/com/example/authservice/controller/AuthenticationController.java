@@ -10,11 +10,15 @@ import com.example.authservice.service.AuthenticationService;
 import com.example.authservice.token.Token;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.Map;
@@ -23,6 +27,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth/user")
+@Transactional
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final TokenRepository tokenRepository;
@@ -62,5 +67,11 @@ public class AuthenticationController {
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(userRepository.findById(id).orElseThrow());
+    }
+
+    @PostMapping("/updateProfile")
+    @ResponseBody
+    public ResponseEntity<String> updateProfile(@RequestPart("user") User user , @RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
+        return authenticationService.updateUserImage(user,multipartFile);
     }
 }

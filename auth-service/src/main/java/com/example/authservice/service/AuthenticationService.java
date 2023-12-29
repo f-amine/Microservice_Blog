@@ -13,7 +13,9 @@ import com.example.authservice.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +24,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +35,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -37,7 +43,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
     private final UserDetailsService userDetailsService;
-
+    private final CloudinaryService cloudinaryService;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -149,5 +155,18 @@ public class AuthenticationService {
         Optional<User> user = userRepository.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    public ResponseEntity<String> updateUserImage(User user, MultipartFile multipartFile) throws IOException {
+        BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
+        if (bi == null) {
+            return new ResponseEntity<>("Image non valide!", HttpStatus.BAD_REQUEST);
+        }
+        Map result = cloudinaryService.upload(multipartFile);
+        user.setProfilPic((String) result.get("url"));
+        user.setPrivateProfilPicId((String) result.get("public_id"));
+        userRepository.save(user);
+        return ResponseEntity.ok().body("Profile update successfully!");
+    }
+
 
 }
